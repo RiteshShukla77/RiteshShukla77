@@ -30,6 +30,16 @@ function onsubmit(e){
   else{
     const li = document.createElement('li');
     const del = document.createElement('button');
+    const edit = document.createElement('button');
+    edit.textContent= "Edit";
+    edit.style.backgroundColor="grey";
+    edit.className="edit";
+    edit.onclick=()=>{
+      name.value=obj.Name,
+      email.value=obj.Email,
+      phone.value=obj.Phone
+      user.removeChild(li);
+    }
     del.textContent= " Delete ";
     del.style.backgroundColor = "red";
     del.className="Delete";
@@ -38,7 +48,9 @@ function onsubmit(e){
       localStorage.removeItem(obj.Email);
     }
     li.appendChild(document.createTextNode( obj.Name + ":" + obj.Email + ":" + obj.Phone));
+    li.appendChild(edit);
     li.appendChild(del);
+    
     user.appendChild(li);
     localStorage.setItem(obj.Email,JSON.stringify(obj));
     //Clear Feilds
