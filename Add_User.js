@@ -4,10 +4,13 @@ const email = document.querySelector('#email');
 const msg = document.querySelector('.msg');
 const user = document.querySelector('#users');
 const phone = document.querySelector('#Phone');
+const backEnd = "https://crudcrud.com/api/5fd0a524987342e0aceb5483a0fd3b30/Appointment_data";
 
 myform.addEventListener('submit',onsubmit);
 
-function onsubmit(e){
+function onsubmit(e)
+{
+
   e.preventDefault();
   
   var obj=
@@ -16,6 +19,8 @@ function onsubmit(e){
     Email : email.value,
     Phone : phone.value
   }
+
+
   if(name.value==''||email.value==''||phone.value=='')
   {
     //alert('Please Enter the Feilds');//
@@ -24,6 +29,8 @@ function onsubmit(e){
     setTimeout(()=> msg.remove(),3000);
     msg.innerHTML="Please Enter All Feilds*"
   }
+
+
   else
   {
     const li = document.createElement('li');
@@ -63,7 +70,7 @@ function onsubmit(e){
     
     user.appendChild(li);
 
-      axios.post("https://crudcrud.com/api/5fd0a524987342e0aceb5483a0fd3b30/Appointment_data",obj)
+      axios.post(backEnd,obj)
         .then(er => {console.log(er)})
         .catch(er => {console.log(er)})
 
