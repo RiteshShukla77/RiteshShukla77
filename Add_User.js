@@ -4,9 +4,26 @@ const email = document.querySelector('#email');
 const msg = document.querySelector('.msg');
 const user = document.querySelector('#users');
 const phone = document.querySelector('#Phone');
-const backEnd = "https://crudcrud.com/api/5fd0a524987342e0aceb5483a0fd3b30/Appointment_data";
+const backEnd = "https://crudcrud.com/api/24fda47a92f44a22a144d7406e114bc5/Appointment_data";
 
 myform.addEventListener('submit',onsubmit);
+
+window.addEventListener("DOMContentLoaded",()=>
+{
+axios.get(backEnd)
+  .then((response)=>{
+  for(let i = 0; i<response.data.length;i++)
+  {
+      showdata(response.data[i]);
+  }
+}
+)
+.catch((response)=>{
+  console.log(response);
+})
+
+}
+)
 
 function onsubmit(e)
 {
@@ -19,6 +36,9 @@ function onsubmit(e)
     Email : email.value,
     Phone : phone.value
   }
+  axios.post(backEnd,obj)
+        .then(er => {console.log(er)})
+        .catch(er => {console.log(er)})
 
 
   if(name.value==''||email.value==''||phone.value=='')
@@ -54,14 +74,13 @@ function onsubmit(e)
     del.style.backgroundColor = "red";
     del.className="Delete";
 
-
     del.onclick = () =>
     {
-    // axios.delete("https://crudcrud.com/api/5fd0a524987342e0aceb5483a0fd3b30/Appointment_data",obj)
-    //   .then(er => {console.log(er)})
-    //   .catch(er => {console.log(er)})
+    axios.delete(backEnd+"/"+obj.data.id)
+      .then(er => {console.log(er)})
+      .catch(er => {console.log(er)})
       user.removeChild(li);
-      localStorage.removeItem(obj.Email);
+      //localStorage.removeItem(obj.Email);
     }
 
     li.appendChild(document.createTextNode( obj.Name + ":" + obj.Email + ":" + obj.Phone));
@@ -70,11 +89,11 @@ function onsubmit(e)
     
     user.appendChild(li);
 
-      axios.post(backEnd,obj)
-        .then(er => {console.log(er)})
-        .catch(er => {console.log(er)})
+      // axios.post(backEnd,obj)
+      //   .then(er => {console.log(er)})
+      //   .catch(er => {console.log(er)})
 
-    localStorage.setItem(obj.Email,JSON.stringify(obj));
+    //localStorage.setItem(obj.Email,JSON.stringify(obj));
     //Clear Feilds
     name.value='';
     email.value='';
@@ -82,3 +101,43 @@ function onsubmit(e)
   }
 
 }
+
+function showdata(i){
+  const li = document.createElement('li');
+    const del = document.createElement('button');
+    const edit = document.createElement('button');
+    edit.textContent= "Edit";
+    edit.style.backgroundColor="grey";
+    edit.className="edit";
+
+
+    edit.onclick=()=>
+    {
+      name.value=i.Name,
+      email.value=i.Email,
+      phone.value=i.Phone
+      user.removeChild(li);
+      localStorage.removeItem(i.Email);
+
+    }
+
+
+    del.textContent= " Delete ";
+    del.style.backgroundColor = "red";
+    del.className="Delete";
+
+    del.onclick = () =>
+    {
+    axios.delete(backEnd+"/"+i.data.id)
+      .then(er => {console.log(er)})
+      .catch(er => {console.log(er)})
+    user.removeChild(li);
+    }
+
+    li.appendChild(document.createTextNode( i.Name + ":" + i.Email + ":" + i.Phone));
+    li.appendChild(edit);
+    li.appendChild(del);
+    
+    user.appendChild(li);
+}
+
